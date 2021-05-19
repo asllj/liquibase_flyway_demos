@@ -3,7 +3,7 @@ pipeline {
   agent any
   
   tools {
-    maven 'Maven 3.6.3'
+   // maven 'Maven 3.6.3'
     jdk 'jdk11'
   }
   
@@ -20,7 +20,12 @@ pipeline {
    
     stage("build"){
       steps{
-        sh 'mvn -B -DskipTests clean package'
+        catchError(buildResult: null, catchInterruptions: false) {
+                    withMaven() {
+                        sh 'mvn clean verify' // -> Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+                    }
+                }
+      
       }
     }
      stage("test"){
