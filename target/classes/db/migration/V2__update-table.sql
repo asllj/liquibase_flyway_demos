@@ -1,0 +1,1 @@
+ALTER TABLE users add phone varchar(9) default null ;
