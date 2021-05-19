@@ -20,9 +20,14 @@ pipeline {
    
     stage("build"){
       steps{
-        catchError(buildResult: null, catchInterruptions: false) {
-                    withMaven() {
-                        sh 'mvn clean verify' // -> Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+         script {
+                    try {
+                        withMaven() {
+                            sh 'mvn clean verify' // -> Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+                        }
+                    } catch (e) {
+                        echo "CurrentResult: $currentBuild.currentResult" // -> UNSTABLE
+                        echo "Result: $currentBuild.result"               // -> UNSTABLE
                     }
                 }
       
